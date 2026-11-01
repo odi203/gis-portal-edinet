@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>GIS_portal Edineț</title>
+  <meta name="description" content="Portal WebGIS pentru orașul Edineț — Leaflet, Bootstrap, jQuery. Lucrarea 6, PBL WebGIS, UTM.">
+
+  <!-- Bootstrap css -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <!-- Leaflet css -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <!-- Fonturi -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Stilul portalului -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Bara de navigare (Bootstrap navbar) -->
+  <nav class="navbar navbar-expand-md navbar-dark">
+    <a class="navbar-brand" href="#"><span class="dot"></span>GIS_portal <b>Edineț</b></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#meniu" aria-controls="meniu" aria-expanded="false" aria-label="Meniu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="meniu">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active"><a class="nav-link" href="#" id="btn-acasa">Harta</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dd-zoom" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Zoom la</a>
+          <div class="dropdown-menu" aria-labelledby="dd-zoom">
+            <a class="dropdown-item zoom-la" href="#" data-ll="48.1718,27.2976" data-z="17">Centrul orașului (primăria)</a>
+            <a class="dropdown-item zoom-la" href="#" data-ll="48.1751,27.3042" data-z="17">Grădina Publică „V. Alecsandri”</a>
+            <a class="dropdown-item zoom-la" href="#" data-ll="48.1536,27.2966" data-z="16">Lacul din sud</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item zoom-la" href="#" data-ll="aoi">Tot orașul</a>
+          </div>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#despre">Despre</a></li>
+      </ul>
+      <span class="navbar-text small" id="zoom-info">zoom 14</span>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- Bara laterală (3 coloane) -->
+      <div class="col-md-3 sidebar" id="sidebar">
+        <ul class="nav nav-tabs nav-fill mt-2" role="tablist">
+          <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-straturi" role="tab">Straturi</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-statistici" role="tab">În vizor</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-info" role="tab" id="tab-info-link">Obiect</a></li>
+        </ul>
+
+        <div class="tab-content pt-3">
+          <!-- Straturi: comutatoare Bootstrap (custom-switch) + legende -->
+          <div class="tab-pane fade show active" id="tab-straturi" role="tabpanel">
+            <div class="form-group mb-3">
+              <input type="search" class="form-control form-control-sm" id="cautare" placeholder="Caută: farmacie, școală, stradă…" autocomplete="off">
+              <div class="list-group mt-1" id="rezultate"></div>
+            </div>
+            <div id="lista-straturi"></div>
+          </div>
+
+          <!-- Statistici: obiectele vizibile în fereastra hărții (evenimentul moveend) -->
+          <div class="tab-pane fade" id="tab-statistici" role="tabpanel">
+            <p class="text-muted small mb-2">Câte obiecte se văd acum pe hartă. Se actualizează când muți sau mărești harta.</p>
+            <div id="statistici"></div>
+          </div>
+
+          <!-- Obiectul selectat (evenimentul click) -->
+          <div class="tab-pane fade" id="tab-info" role="tabpanel">
+            <div id="info"><p class="text-muted small">Click pe un obiect de pe hartă pentru a vedea atributele lui aici.</p></div>
+          </div>
+        </div>
+
+        <div class="coordonate small" id="coordonate">Mișcă mouse-ul pe hartă</div>
+      </div>
+
+      <!-- Harta (9 coloane) -->
+      <div class="col-md-9 p-0">
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fereastra „Despre” (Bootstrap modal) -->
+  <div class="modal fade" id="despre" tabindex="-1" role="dialog" aria-labelledby="despre-titlu" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="despre-titlu">Despre GIS_portal Edineț</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Închide"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>Portal WebGIS pentru orașul <b>Edineț</b>, realizat în <b>Visual Studio Code</b> cu Leaflet 1.9.4,
+             Bootstrap 4.6.2 și jQuery 3.7.1, rulat local cu extensia <b>Live Server</b>.</p>
+          <p><b>Datele</b> sunt fișiere <code>.shp</code> convertite în GeoJSON și salvate ca variabile JavaScript
+             (<code>lib/*.js</code>) cu scriptul <code>pregateste_date_portal.sh</code>:</p>
+          <ul>
+            <li>© OpenStreetMap contributors: clădiri, drumuri, ape, servicii, rețeaua electrică (04.10.2026)</li>
+            <li>CORINE Land Cover 2018: Copernicus Land Monitoring Service</li>
+            <li>Ortofotoplan 2016: serviciul WMS al INDS (geodata.gov.md)</li>
+          </ul>
+          <p class="mb-0 text-muted">Groza Odi, gr. IGC-223 F/R · Coordonator: conf. univ. dr. Sîrbu Rodica · UTM 2026</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery + Bootstrap js -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Leaflet js -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Leaflet providers (hărți de fundal) -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-providers@2.0.0/leaflet-providers.js"></script>
+
+  <!-- Datele spațiale (GeoJSON ca variabile JavaScript) -->
+  <script src="./lib/aoi.js"></script>
+  <script src="./lib/corine.js"></script>
+  <script src="./lib/apa_pol.js"></script>
+  <script src="./lib/apa_lin.js"></script>
+  <script src="./lib/cladiri.js"></script>
+  <script src="./lib/drumuri.js"></script>
+  <script src="./lib/electric_lin.js"></script>
+  <script src="./lib/posturi.js"></script>
+  <script src="./lib/agrement_pol.js"></script>
+  <script src="./lib/transport.js"></script>
+  <script src="./lib/poi.js"></script>
+  <script src="./lib/istoric.js"></script>
+
+  <!-- Harta -->
+  <script src="js/portal.js"></script>
+</body>
+</html>

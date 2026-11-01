@@ -1,0 +1,92 @@
+/* GIS_portal Edineț — stil întunecat peste Bootstrap 4.6.2 */
+:root {
+  --bg: #0e1117; --panel: #161b24; --panel2: #1c2330; --line: #2a3442;
+  --txt: #e6edf3; --muted: #9aa5b5; --accent: #00e5ff;
+  --nav-h: 56px;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--txt); font-family: 'Inter', system-ui, 'Segoe UI', sans-serif; font-size: 14px; }
+a { color: var(--accent); }
+.text-muted { color: var(--muted) !important; }
+
+/* ---- navbar */
+.navbar { background: var(--panel); border-bottom: 1px solid var(--line); height: var(--nav-h); }
+.navbar-brand { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: .3px; }
+.navbar-brand b { color: var(--accent); font-weight: 700; }
+.navbar-brand .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 10px var(--accent); margin-right: 9px; vertical-align: 2px; }
+.navbar-dark .navbar-nav .nav-link { color: var(--muted); }
+.navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .active > .nav-link { color: var(--txt); }
+.navbar-text { color: var(--muted) !important; font-variant-numeric: tabular-nums; }
+.dropdown-menu { background: var(--panel2); border: 1px solid var(--line); }
+.dropdown-item { color: var(--txt); font-size: 14px; }
+.dropdown-item:hover { background: rgba(0,229,255,.1); color: var(--txt); }
+.dropdown-divider { border-color: var(--line); }
+
+/* ---- bara laterală + harta: înălțimea ferestrei minus navbar */
+.sidebar { height: calc(100vh - var(--nav-h)); overflow-y: auto; background: var(--panel); border-right: 1px solid var(--line);
+  padding-bottom: 46px; position: relative; }
+#map { height: calc(100vh - var(--nav-h)); background: var(--bg); }
+
+.nav-tabs { border-bottom-color: var(--line); }
+.nav-tabs .nav-link { color: var(--muted); border: 0; border-bottom: 2px solid transparent; font-weight: 500; }
+.nav-tabs .nav-link:hover { color: var(--txt); border-bottom-color: var(--line); }
+.nav-tabs .nav-link.active { background: transparent; color: var(--accent); border-bottom-color: var(--accent); }
+
+.form-control { background: var(--bg); border-color: var(--line); color: var(--txt); }
+.form-control:focus { background: var(--bg); color: var(--txt); border-color: var(--accent); box-shadow: 0 0 0 .2rem rgba(0,229,255,.15); }
+.list-group-item { background: var(--panel2); border-color: var(--line); color: var(--txt); padding: .45rem .75rem; font-size: 13px; cursor: pointer; }
+.list-group-item:hover { background: rgba(0,229,255,.1); }
+.list-group-item small { color: var(--muted); display: block; }
+
+/* ---- straturi */
+.strat { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; background: var(--bg); }
+.strat .custom-control-label { cursor: pointer; font-weight: 500; }
+.strat .nr { float: right; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.custom-switch .custom-control-label::before { background: var(--panel2); border-color: var(--line); }
+.custom-control-input:checked ~ .custom-control-label::before { background: var(--accent); border-color: var(--accent); }
+.custom-switch .custom-control-input:checked ~ .custom-control-label::after { background: var(--bg); }
+.legenda { margin: 6px 0 0 2.2rem; }
+.legenda div { font-size: 12.5px; color: #c9d1dc; line-height: 1.7; }
+.legenda i { display: inline-block; width: 14px; height: 10px; margin-right: 7px; border-radius: 2px; vertical-align: -1px;
+  border: 1px solid rgba(255,255,255,.2); }
+.legenda i.pct { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--bg); box-shadow: 0 0 0 1px currentColor; }
+.legenda i.lin { height: 3px; border: 0; vertical-align: 3px; }
+
+/* ---- statistici */
+.stat { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 7px 2px; }
+.stat b { font-family: 'Space Grotesk', sans-serif; font-size: 18px; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+/* ---- info obiect */
+.info-titlu { font-family: 'Space Grotesk', sans-serif; font-size: 20px; margin: 2px 0 10px; }
+.info-strat { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--accent); }
+table.atribute { width: 100%; font-size: 13px; }
+table.atribute th { color: var(--muted); font-weight: 500; padding: 4px 8px 4px 0; vertical-align: top; width: 40%; }
+table.atribute td { padding: 4px 0; }
+table.atribute tr { border-bottom: 1px solid var(--line); }
+
+.coordonate { position: sticky; bottom: 0; margin: 12px -15px 0; padding: 9px 15px; background: var(--panel2); border-top: 1px solid var(--line);
+  color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ---- Leaflet în stil întunecat */
+.leaflet-container { font-family: inherit; }
+.leaflet-bar a, .leaflet-bar a:hover { background: var(--panel); color: var(--txt); border-bottom-color: var(--line); }
+.leaflet-control-layers { background: var(--panel); color: var(--txt); border: 1px solid var(--line) !important; border-radius: 10px !important; }
+.leaflet-control-layers-separator { border-top-color: var(--line); }
+.leaflet-control-scale-line { background: rgba(14,17,23,.75); color: var(--txt); border-color: var(--muted); }
+.leaflet-control-attribution { background: rgba(14,17,23,.75) !important; color: var(--muted); }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--panel2); color: var(--txt); }
+.leaflet-popup-content b { color: var(--accent); }
+.glow { filter: drop-shadow(0 0 4px #00e5ff) drop-shadow(0 0 9px rgba(0,229,255,.55)); }
+
+/* ---- modal */
+.modal-content { background: var(--panel); border: 1px solid var(--line); color: var(--txt); }
+.modal-header { border-bottom-color: var(--line); }
+.close { color: var(--txt); text-shadow: none; }
+code { color: #ff9bb6; }
+
+@media (max-width: 767px) {
+  .sidebar { height: auto; max-height: 45vh; }
+  #map { height: 55vh; }
+  .navbar { height: auto; }
+}
